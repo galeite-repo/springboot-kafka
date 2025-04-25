@@ -8,7 +8,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     networks:
-      - kafka-net
+      - spring-boot-net
 
   kafka:
     image: docker.io/confluentinc/cp-kafka:latest
@@ -30,7 +30,7 @@ services:
     depends_on:
       - zookeeper
     networks:
-      - kafka-net
+      - spring-boot-net
 
   kafka-ui:
     image: docker.io/provectuslabs/kafka-ui:latest
@@ -44,8 +44,20 @@ services:
     depends_on:
       - kafka
     networks:
-      - kafka-net
+      - spring-boot-net
+  
+  postgres:
+    image: docker.io/postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432" # Porta padrão do PostgreSQL
+    networks:
+      - spring-boot-net
 
 networks:
-  kafka-net:
-    driver: bridge
+  spring-boot-net:
+    external: true
